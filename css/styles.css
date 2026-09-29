@@ -598,6 +598,7 @@ p { margin: 0 0 1em; }
   .lead-long { display: none; }
   .lead-short { display: inline; }
   .hero-lead { margin-bottom: 2rem; }
+  .about-media { display: none; }
   .hero-actions .btn { width: 100%; }
   .scroll-cue { display: none; }
   .divider span { width: 70px; }
