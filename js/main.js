@@ -53,6 +53,28 @@ const SITE_CONFIG = {
 
   // Quote form
   const form = document.getElementById("quote-form");
+  const serviceSelect = document.getElementById("service");
+  const fromLabel = form.querySelector("[data-from-label]");
+  const toField = form.querySelector("[data-to-field]");
+
+  // Destination only applies to moves and deliveries
+  const updateServiceFields = () => {
+    const svc = serviceSelect.value;
+    const noDestination = svc === "Junk Removal" || svc === "Furniture Assembly Only";
+    toField.hidden = noDestination;
+    if (noDestination) toField.querySelector("input").value = "";
+    fromLabel.textContent = noDestination ? "Service Address (City / ZIP)" : "Pickup Location (City / ZIP)";
+  };
+  serviceSelect.addEventListener("change", updateServiceFields);
+
+  // Service card links preselect the service in the form
+  document.querySelectorAll("[data-service]").forEach((a) =>
+    a.addEventListener("click", () => {
+      serviceSelect.value = a.dataset.service;
+      updateServiceFields();
+    })
+  );
+
   const status = form.querySelector(".form-status");
   const setStatus = (msg, cls) => { status.textContent = msg; status.className = "form-status " + (cls || ""); };
 
@@ -82,6 +104,7 @@ const SITE_CONFIG = {
         });
         if (!res.ok) throw new Error(res.statusText);
         form.reset();
+        updateServiceFields();
         setStatus("Thank you! We'll be in touch shortly with your quote.", "ok");
       } catch {
         setStatus("Something went wrong. Please call or email us directly.", "err");
@@ -90,19 +113,20 @@ const SITE_CONFIG = {
     }
 
     const body = [
+      `Service: ${data.service}`,
       `Name: ${data.name}`,
       `Phone: ${data.phone}`,
       `Email: ${data.email}`,
-      `Moving from: ${data.from}`,
-      `Moving to: ${data.to}`,
-      `Move date: ${data.date || "Flexible"}`,
-      `Move size: ${data.size || "Not specified"}`,
+      `Pickup / service address: ${data.from}`,
+      `Destination: ${data.to || "N/A"}`,
+      `Preferred date: ${data.date || "Flexible"}`,
+      `Job size: ${data.size || "Not specified"}`,
       "",
       "Details:",
       data.details || "-",
     ].join("\n");
     window.location.href =
-      `mailto:${SITE_CONFIG.email}?subject=${encodeURIComponent("Quote Request - " + data.name)}&body=${encodeURIComponent(body)}`;
+      `mailto:${SITE_CONFIG.email}?subject=${encodeURIComponent(`Quote Request - ${data.service} - ${data.name}`)}&body=${encodeURIComponent(body)}`;
     setStatus("Opening your email app to send the request…", "ok");
   });
 

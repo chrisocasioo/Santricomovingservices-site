@@ -1,6 +1,6 @@
 # Santrico Moving Services — Website
 
-A fast, static, single-page site for Santrico Moving Services in the brand's black and gold style. It uses plain HTML, CSS and JavaScript, with no build step.
+A fast, static, single-page site for Santrico Moving Services (moving, junk removal, and furniture delivery & assembly) in the brand's black and gold style. It uses plain HTML, CSS and JavaScript, with no build step.
 
 ## Structure
 
