@@ -9,6 +9,8 @@ index.html            Page markup (hero, services, process, about, FAQ, quote fo
 css/styles.css        All styles (theme colors are variables at the top)
 js/main.js            Mobile menu, scroll effects, quote form, business details
 assets/img/           Logos and favicon
+CNAME                 Custom domain for GitHub Pages
+robots.txt, sitemap.xml  Search engine files
 ```
 
 ## Before going live
@@ -29,6 +31,20 @@ python3 -m http.server 8000
 
 Then open http://localhost:8000.
 
-## Deploy
+## Deploy (GitHub Pages + santricomovingservices.com)
 
-Any static host works: GitHub Pages (Settings → Pages → deploy from this branch, root folder), Netlify or Vercel.
+The `CNAME` file already tells GitHub Pages to serve the site at `santricomovingservices.com`.
+
+1. **GitHub:** Settings → Pages → Source: "Deploy from a branch" → pick the site's branch and `/ (root)` → Save.
+   Under "Custom domain" confirm `santricomovingservices.com`, and once the DNS check passes, tick **Enforce HTTPS**.
+2. **Domain registrar (DNS settings):** remove any existing A/AAAA/CNAME records for `@` and `www` (such as "parked" records), then add:
+
+   | Type  | Host / Name | Value                   |
+   |-------|-------------|-------------------------|
+   | A     | @           | 185.199.108.153         |
+   | A     | @           | 185.199.109.153         |
+   | A     | @           | 185.199.110.153         |
+   | A     | @           | 185.199.111.153         |
+   | CNAME | www         | chrisocasioo.github.io  |
+
+   DNS changes usually take effect within an hour but can take up to 24–48 hours.
