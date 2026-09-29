@@ -6,7 +6,7 @@
 const SITE_CONFIG = {
   phoneDisplay: "(314) 228-1081",
   phoneE164: "+13142281081",
-  email: "info@example.com",        // TODO: real email address
+  email: "santricomovingservices@gmail.com",
   // Optional: a form backend URL (e.g. Formspree "https://formspree.io/f/xxxx").
   // If empty, the quote form opens the visitor's email app pre-filled instead.
   formEndpoint: "",
