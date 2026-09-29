@@ -15,7 +15,7 @@ assets/img/           Logos and favicon
 
 Open `js/main.js` and fill in `SITE_CONFIG`:
 
-- `phoneDisplay` / `phoneE164`: the business phone number
+- `phoneDisplay` / `phoneE164`: the business phone number (set to (314) 228-1081)
 - `email`: where quote requests should go
 - `formEndpoint` (optional): a form backend such as [Formspree](https://formspree.io). Without one, the quote form opens the visitor's email app with the request already filled in.
 

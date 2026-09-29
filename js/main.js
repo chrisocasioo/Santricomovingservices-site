@@ -4,8 +4,8 @@
 
 // ---- Business details: edit these in one place ----
 const SITE_CONFIG = {
-  phoneDisplay: "(000) 000-0000",   // TODO: real phone number
-  phoneE164: "+10000000000",        // TODO: same number, digits only with country code
+  phoneDisplay: "(314) 228-1081",
+  phoneE164: "+13142281081",
   email: "info@example.com",        // TODO: real email address
   // Optional: a form backend URL (e.g. Formspree "https://formspree.io/f/xxxx").
   // If empty, the quote form opens the visitor's email app pre-filled instead.
