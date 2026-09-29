@@ -7,9 +7,9 @@ const SITE_CONFIG = {
   phoneDisplay: "(314) 228-1081",
   phoneE164: "+13142281081",
   email: "santricomovingservices@gmail.com",
-  // Optional: a form backend URL (e.g. Formspree "https://formspree.io/f/xxxx").
-  // If empty, the quote form opens the visitor's email app pre-filled instead.
-  formEndpoint: "",
+  // Quote requests are emailed via FormSubmit (formsubmit.co). If this is empty,
+  // or sending fails, the form opens the visitor's email app pre-filled instead.
+  formEndpoint: "https://formsubmit.co/ajax/santricomovingservices@gmail.com",
 };
 
 (function () {
@@ -94,40 +94,57 @@ const SITE_CONFIG = {
 
     const data = Object.fromEntries(new FormData(form).entries());
 
-    if (SITE_CONFIG.formEndpoint) {
-      setStatus("Sending…");
-      try {
-        const res = await fetch(SITE_CONFIG.formEndpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(data),
-        });
-        if (!res.ok) throw new Error(res.statusText);
-        form.reset();
-        updateServiceFields();
-        setStatus("Thank you! We'll be in touch shortly with your quote.", "ok");
-      } catch {
-        setStatus("Something went wrong. Please call or email us directly.", "err");
-      }
+    const subject = `Quote Request - ${data.service} - ${data.name}`;
+    const fields = {
+      Service: data.service,
+      Name: data.name,
+      Phone: data.phone,
+      Email: data.email,
+      "Pickup / Service Address": data.from,
+      Destination: data.to || "N/A",
+      "Preferred Date": data.date || "Flexible",
+      "Job Size": data.size || "Not specified",
+      Details: data.details || "-",
+    };
+
+    const openEmailApp = () => {
+      const body = Object.entries(fields).map(([k, v]) => `${k}: ${v}`).join("\n");
+      window.location.href =
+        `mailto:${SITE_CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    };
+
+    if (!SITE_CONFIG.formEndpoint) {
+      openEmailApp();
+      setStatus("Opening your email app to send the request…", "ok");
       return;
     }
 
-    const body = [
-      `Service: ${data.service}`,
-      `Name: ${data.name}`,
-      `Phone: ${data.phone}`,
-      `Email: ${data.email}`,
-      `Pickup / service address: ${data.from}`,
-      `Destination: ${data.to || "N/A"}`,
-      `Preferred date: ${data.date || "Flexible"}`,
-      `Job size: ${data.size || "Not specified"}`,
-      "",
-      "Details:",
-      data.details || "-",
-    ].join("\n");
-    window.location.href =
-      `mailto:${SITE_CONFIG.email}?subject=${encodeURIComponent(`Quote Request - ${data.service} - ${data.name}`)}&body=${encodeURIComponent(body)}`;
-    setStatus("Opening your email app to send the request…", "ok");
+    const button = form.querySelector('button[type="submit"]');
+    button.disabled = true;
+    setStatus("Sending…");
+    try {
+      const res = await fetch(SITE_CONFIG.formEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          ...fields,
+          _subject: subject,
+          _replyto: data.email,
+          _template: "table",
+          _honey: data._honey || "",
+        }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || String(json.success) !== "true") throw new Error(json.message || res.statusText);
+      form.reset();
+      updateServiceFields();
+      setStatus("Thank you! Your request was sent. We'll be in touch shortly with your quote.", "ok");
+    } catch {
+      setStatus(`We couldn't send your request online. Opening your email app instead, or call us at ${SITE_CONFIG.phoneDisplay}.`, "err");
+      openEmailApp();
+    } finally {
+      button.disabled = false;
+    }
   });
 
   form.addEventListener("input", (e) => {

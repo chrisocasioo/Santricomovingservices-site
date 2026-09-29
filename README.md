@@ -19,7 +19,7 @@ Open `js/main.js` and fill in `SITE_CONFIG`:
 
 - `phoneDisplay` / `phoneE164`: the business phone number (set to (314) 228-1081)
 - `email`: where quote requests go (set to santricomovingservices@gmail.com)
-- `formEndpoint` (optional): a form backend such as [Formspree](https://formspree.io). Without one, the quote form opens the visitor's email app with the request already filled in.
+- `formEndpoint`: quote requests are emailed through [FormSubmit](https://formsubmit.co) to the address above. The very first submission sends an activation email to that inbox; click **Activate Form** in it once. If sending ever fails, the form falls back to opening the visitor's email app.
 
 Also check the business hours in the contact section of `index.html` (currently "Mon – Sat: 7:00 AM – 7:00 PM").
 
