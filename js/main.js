@@ -7,9 +7,6 @@ const SITE_CONFIG = {
   phoneDisplay: "(314) 228-1081",
   phoneE164: "+13142281081",
   email: "santricomovingservices@gmail.com",
-  // Quote requests are emailed via FormSubmit (formsubmit.co). If this is empty,
-  // or sending fails, the form opens the visitor's email app pre-filled instead.
-  formEndpoint: "https://formsubmit.co/ajax/santricomovingservices@gmail.com",
 };
 
 (function () {
@@ -78,7 +75,7 @@ const SITE_CONFIG = {
   const status = form.querySelector(".form-status");
   const setStatus = (msg, cls) => { status.textContent = msg; status.className = "form-status " + (cls || ""); };
 
-  form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
     let firstInvalid = null;
     form.querySelectorAll("input, select, textarea").forEach((f) => {
@@ -107,44 +104,11 @@ const SITE_CONFIG = {
       Details: data.details || "-",
     };
 
-    const openEmailApp = () => {
-      const body = Object.entries(fields).map(([k, v]) => `${k}: ${v}`).join("\n");
-      window.location.href =
-        `mailto:${SITE_CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    };
-
-    if (!SITE_CONFIG.formEndpoint) {
-      openEmailApp();
-      setStatus("Opening your email app to send the request…", "ok");
-      return;
-    }
-
-    const button = form.querySelector('button[type="submit"]');
-    button.disabled = true;
-    setStatus("Sending…");
-    try {
-      const res = await fetch(SITE_CONFIG.formEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          ...fields,
-          _subject: subject,
-          _replyto: data.email,
-          _template: "table",
-          _honey: data._honey || "",
-        }),
-      });
-      const json = await res.json().catch(() => ({}));
-      if (!res.ok || String(json.success) !== "true") throw new Error(json.message || res.statusText);
-      form.reset();
-      updateServiceFields();
-      setStatus("Thank you! Your request was sent. We'll be in touch shortly with your quote.", "ok");
-    } catch {
-      setStatus(`We couldn't send your request online. Opening your email app instead, or call us at ${SITE_CONFIG.phoneDisplay}.`, "err");
-      openEmailApp();
-    } finally {
-      button.disabled = false;
-    }
+    // Opens the visitor's email app with the request addressed to the business
+    const body = Object.entries(fields).map(([k, v]) => `${k}: ${v}`).join("\n");
+    window.location.href =
+      `mailto:${SITE_CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setStatus(`Opening your email app to send the request. If nothing opens, email ${SITE_CONFIG.email} or call ${SITE_CONFIG.phoneDisplay}.`, "ok");
   });
 
   form.addEventListener("input", (e) => {
