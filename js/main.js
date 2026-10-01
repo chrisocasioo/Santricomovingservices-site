@@ -72,6 +72,16 @@ const SITE_CONFIG = {
     })
   );
 
+  // Preferred date: earliest choice is tomorrow (local time)
+  const dateInput = form.querySelector('input[name="date"]');
+  const setMinDate = () => {
+    const t = new Date();
+    t.setDate(t.getDate() + 1);
+    dateInput.min = [t.getFullYear(), String(t.getMonth() + 1).padStart(2, "0"), String(t.getDate()).padStart(2, "0")].join("-");
+  };
+  setMinDate();
+  form.addEventListener("focusin", (e) => e.target === dateInput && setMinDate());
+
   const status = form.querySelector(".form-status");
   const setStatus = (msg, cls) => { status.textContent = msg; status.className = "form-status " + (cls || ""); };
 
@@ -84,7 +94,7 @@ const SITE_CONFIG = {
       if (bad && !firstInvalid) firstInvalid = f;
     });
     if (firstInvalid) {
-      setStatus("Please fill in the highlighted fields.", "err");
+      setStatus(firstInvalid === dateInput ? "Please choose a date starting tomorrow." : "Please fill in the highlighted fields.", "err");
       firstInvalid.focus();
       return;
     }
