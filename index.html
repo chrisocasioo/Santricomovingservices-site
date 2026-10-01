@@ -324,11 +324,11 @@
             </select>
           </label>
           <div class="form-row">
-            <label><span data-from-label>Pickup Location (City / ZIP)</span>
-              <input type="text" name="from" required>
+            <label><span data-from-label>Pickup Location (Street / City / ZIP)</span>
+              <input type="text" name="from" autocomplete="street-address" placeholder="123 Main St, St. Louis, MO 63101" required>
             </label>
-            <label data-to-field><span>Destination (City / ZIP)</span>
-              <input type="text" name="to">
+            <label data-to-field><span>Destination (Street / City / ZIP)</span>
+              <input type="text" name="to" placeholder="456 Oak Ave, Clayton, MO 63105">
             </label>
           </div>
           <div class="form-row">

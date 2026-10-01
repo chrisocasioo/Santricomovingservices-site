@@ -60,7 +60,7 @@ const SITE_CONFIG = {
     const noDestination = svc === "Junk Removal" || svc === "Furniture Assembly Only";
     toField.hidden = noDestination;
     if (noDestination) toField.querySelector("input").value = "";
-    fromLabel.textContent = noDestination ? "Service Address (City / ZIP)" : "Pickup Location (City / ZIP)";
+    fromLabel.textContent = noDestination ? "Service Address (Street / City / ZIP)" : "Pickup Location (Street / City / ZIP)";
   };
   serviceSelect.addEventListener("change", updateServiceFields);
 
