@@ -6,7 +6,7 @@
 const SITE_CONFIG = {
   phoneDisplay: "(314) 228-1081",
   phoneE164: "+13142281081",
-  email: "chris@santricomovingservices.com",
+  email: "sales@santricomovingservices.com",
 };
 
 (function () {

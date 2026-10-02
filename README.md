@@ -18,7 +18,7 @@ robots.txt, sitemap.xml  Search engine files
 Open `js/main.js` and fill in `SITE_CONFIG`:
 
 - `phoneDisplay` / `phoneE164`: the business phone number (set to (314) 228-1081)
-- `email`: where quote requests go (set to chris@santricomovingservices.com). Submitting the quote form opens the visitor's email app with the request pre-filled and addressed to this inbox.
+- `email`: where quote requests go (set to sales@santricomovingservices.com). Submitting the quote form opens the visitor's email app with the request pre-filled and addressed to this inbox.
 
 Also check the business hours in the contact section of `index.html` (currently "Mon – Sat: 7:00 AM – 7:00 PM").
 
