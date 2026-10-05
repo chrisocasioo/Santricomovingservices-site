@@ -505,6 +505,18 @@ p { margin: 0 0 1em; }
   color-scheme: dark;
 }
 .quote-form textarea { resize: vertical; }
+/* Grid children default to min-width:auto, so a date input's intrinsic width
+   (Safari/iOS especially) can push past its column and overlap its neighbor. */
+.form-row > label { min-width: 0; }
+.quote-form input, .quote-form select { min-width: 0; max-width: 100%; }
+.quote-form input:not([type="date"]), .quote-form select { height: 50px; }
+.quote-form input[type="date"] { height: 50px; }
+.quote-form input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  text-align: left;
+}
+.quote-form input[type="date"]::-webkit-date-and-time-value { text-align: left; margin: 0; }
 .quote-form input:focus, .quote-form select:focus, .quote-form textarea:focus {
   outline: none;
   border-color: var(--gold);
